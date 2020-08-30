@@ -31,9 +31,9 @@ spec:
         tty: true
         volumeMounts:
         - mountPath: /var/lib/mysql/
-          name: dbdata
+          name: {{ template "mediawiki.fullname" . }}-dbdata
       restartPolicy: Always
       volumes:
-      - name: dbdata
+      - name: {{ template "mediawiki.fullname" . }}-dbdata
         persistentVolumeClaim:
-          claimName: dbdata
+          claimName: {{ template "mediawiki.fullname" . }}-dbdata
