@@ -61,3 +61,6 @@ Configurable parameters for mediawiki
 - run docker build -t <<**repo name**>>:<<**tag**>> --build-arg MEDIAWIKI_VERSION=1.34 --build-arg MEDIAWIKI_SUBVERSION=2 .
 - ARG values for MEDIAWIKI_VERSION & MEDIAWIKI_SUBVERSION can be found - https://releases.wikimedia.org/mediawiki/
 - to push - docker push <<**repo name**>>:<<**tag**>>
+
+## WIP - Unable to complete
+- code to bootstrap the application with LocalSettings.php - https://github.com/vijayaraghavan-i/mediawiki/tree/feature/configmap
