@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "mediawiki.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: {{ template "mediawiki.fullname" . }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        component: {{ template "mediawiki.fullname" . }}
+    spec:
+      containers:
+        - name: php
+          image: {{ template "mediawiki.image" . }}
+          args:
+            - /usr/sbin/php-fpm
+            - --nodaemonize
+          volumeMounts:
+            - mountPath: /run/php-fpm/
+              name: socket
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+        - name: apache
+          image: {{ template "mediawiki.image" . }}
+          #image: docker.io/vijayaraghavan18/works:1.0
+          command:
+            - /run-httpd.sh
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /run/php-fpm/
+              name: socket
+          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+      volumes:
+      - name: socket
+        emptyDir: {}
