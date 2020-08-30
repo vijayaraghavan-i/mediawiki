@@ -1,9 +1,10 @@
+{{- if .Values.autoscaling.enabled -}}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "mediawiki.fullname" . }}
 spec:
-  maxReplicas: 10
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   scaleTargetRef:
     kind: Deployment
     name: {{ template "mediawiki.fullname" . }}
@@ -14,5 +15,6 @@ spec:
           name: cpu
           target:
             type: Utilization
-            averageUtilization: 5
-  minReplicas: 2
+            averageUtilization: {{ .Values.autoscaling.averageUtilization }}
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+{{- end -}}
