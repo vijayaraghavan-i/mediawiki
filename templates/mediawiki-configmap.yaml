@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "mediawiki.fullname" . }}-configmap
+data:
+  LocalSettings.php: |-
+{{ .Files.Get "config/LocalSettings.php" | indent 4 }}

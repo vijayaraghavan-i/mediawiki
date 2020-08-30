@@ -1,0 +1,4 @@
+parameters:
+  $wgSitename: {{ .Values.configs.databaseUsername }}
+  $wgDBserver: ${{ .Values.secrets.databaseName }}
+  $wgDBpassword: ${{ .Values.secrets.databasePassword }}

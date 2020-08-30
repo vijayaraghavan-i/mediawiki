@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "mediawiki.fullname" . }}
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       component: {{ template "mediawiki.fullname" . }}
@@ -25,6 +25,9 @@ spec:
           volumeMounts:
             - mountPath: /run/php-fpm/
               name: socket
+            # - name: config-volume
+            #   mountPath: "/var/www/html/LocalSettings.php"
+            #   subPath: "LocalSettings.php"
           imagePullPolicy: {{ .Values.image.imagePullPolicy }}
           resources:
             limits:
@@ -57,3 +60,6 @@ spec:
       volumes:
       - name: socket
         emptyDir: {}
+      - name: config-volume
+        configMap:
+          name: {{ template "mediawiki.fullname" . }}-configmap
