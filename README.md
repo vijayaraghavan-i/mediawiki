@@ -18,12 +18,14 @@ Following softwares to be installed
 ![Overall Landscape](https://github.com/vijayaraghavan-i/mediawiki/blob/master/.architecture/Overall%20Landscape.jpg)
 
 ## steps to upgrade mediawiki
-- run command - helm upgrade <<**release-version**>> --set image.tag=2.0 <<**directory name/path**>>
+- run command - helm upgrade <<**release-version**>> --set image.tag=1.1 <<**directory name/path**>>
+- rolling update stratergy is set with max unavailable to 50%
 
 ## Below is blown up version of mediawiki deployment & HPA
 ![Drill down into Mediawiki Pod](https://github.com/vijayaraghavan-i/mediawiki/blob/master/.architecture/mediawiki-pod.png)
 
 ## To have the HPA scaling
+- To make this demonstrable, the resource limits for the containers is set very low with cpu as 100m and memory as 128Mi
 - run command -  kubectl run -it busybox --image=busybox /bin/sh
 - while true; do wget -q -O- http://<<**Minikube ip**>>; done
 - run command - minikube dashboard
