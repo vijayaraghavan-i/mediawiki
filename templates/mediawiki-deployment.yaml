@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ template "mediawiki.fullname" . }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       component: {{ template "mediawiki.fullname" . }}
