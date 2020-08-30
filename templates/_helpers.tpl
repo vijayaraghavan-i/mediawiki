@@ -24,7 +24,7 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
-SOme text here
+Get's the formatted image url
 */}}
 {{- define "mediawiki.image" -}}
 {{- $registryName := .Values.image.registry -}}
