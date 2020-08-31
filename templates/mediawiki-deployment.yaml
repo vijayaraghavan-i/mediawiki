@@ -23,7 +23,7 @@ spec:
             - sh
             - -c
           args:
-            - php /var/www/html/maintenance/install.php --dbname=$wgDBname --dbserver=$wgDBserver --installdbuser=root --installdbpass=$wgDBpassword --dbuser=$wgDBuser --dbpass=$wgUserDBpassword --server='http://192.168.57.211' --scriptpath='' --lang=en --pass=aaaaa 'Wiki Name' 'Admin' && exec /usr/sbin/php-fpm --nodaemonize
+            - php /var/www/html/maintenance/install.php --dbname=$wgDBname --dbserver=$wgDBserver --installdbuser=root --installdbpass=$wgDBpassword --dbuser=$wgDBuser --dbpass=$wgUserDBpassword --server='' --scriptpath='' --lang=en --pass=aaaaa 'Wiki Name' 'Admin' && exec /usr/sbin/php-fpm --nodaemonize
           volumeMounts:
             - mountPath: /run/php-fpm/
               name: socket

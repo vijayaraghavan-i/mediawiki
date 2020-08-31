@@ -10,7 +10,7 @@ image:
   registry: docker.io
   repository: vijayaraghavan18/works
   tag: "1.0"
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
