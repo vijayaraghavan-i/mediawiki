@@ -10,7 +10,7 @@ Following softwares to be installed
 - get ip of minikube - minikube ip
 
 ## Steps to deploy mediawiki
-- checkout the code - git clone git@github.com:vijayaraghavan-i/mediawiki.git <<directory name>>
+- checkout the code - git clone git@github.com:vijayaraghavan-i/mediawiki.git <<**directory name**>>
 - run command - helm install <<**release-version**>> <<**directory name/path**>>
 - in browser - https://<<**Minikube ip**>>
 
@@ -24,8 +24,21 @@ Following softwares to be installed
 ## Below is blown up version of mediawiki deployment & HPA
 ![Drill down into Mediawiki Pod](https://github.com/vijayaraghavan-i/mediawiki/blob/master/.architecture/mediawiki-pod.png)
 
+## mediawiki Installation
+- Mediawiki is installed using maintenance/install.php - more details can be found here - https://www.mediawiki.org/wiki/Manual:Install.php
+- The parameters needed to pass are set as environment variables and retrieved from secrets
+
+## secrets
+- the chart creates 2 secrets, root user pwd and the db user password
+- these are randomly generated passwords that are fed into the mediwiki-deployment
+
+## HPA
+- HPA can be enabled or disabled by setting - autoscaling.enabled
+- as showcase, default metric scaling is choosen as cpu
+- max, min replicas & averageUtilization can be set in values.yaml file under autoscaling 
+
 ## To have the HPA scaling
-- To make this demonstrable, the resource limits for the containers is set very low with cpu as 100m and memory as 128Mi
+- To make this demonstrable, the resource limits for the containers is set very low with cpu as 500m and memory as 128Mi and average utlization for scale up is to 5%
 - run command -  kubectl run -it busybox --image=busybox /bin/sh
 - while true; do wget -q -O- http://<<**Minikube ip**>>; done
 - run command - minikube dashboard
@@ -39,10 +52,12 @@ Following softwares to be installed
 Configurable parameters for mediawiki
 | Parameter        | Description           | Default  |
 | :-------------: |:-------------:| :-----:|
-| replicaCount      | Default number of pods for mediawiki | 1 |
+| replicaCount      | Default number of pods for mediawiki | 3 |
+| dbUser      | Default db user mediawiki | gekko |
 | image.registry      | registry      |   docker.io |
 | image.repository | repository      |    vijayaraghavan18/works |
 | image.tag | tag      |    1.0 |
+| image.pullPolicy | IfNotPresent      |    IfNotPresent |
 | imagePullSecrets | image secrets      |    nil |
 | nameOverride |    String to partially override mediawiki.fullname template with a string (will prepend the release name)   |   nil |
 | fullnameOverride |   String to fully override mediawiki.fullname template with a string    |    nil |
@@ -63,6 +78,3 @@ Configurable parameters for mediawiki
 - run docker build -t <<**repo name**>>:<<**tag**>> --build-arg MEDIAWIKI_VERSION=1.34 --build-arg MEDIAWIKI_SUBVERSION=2 .
 - ARG values for MEDIAWIKI_VERSION & MEDIAWIKI_SUBVERSION can be found - https://releases.wikimedia.org/mediawiki/
 - to push - docker push <<**repo name**>>:<<**tag**>>
-
-## WIP - Unable to complete
-- code to bootstrap the application with LocalSettings.php - https://github.com/vijayaraghavan-i/mediawiki/tree/feature/configmap

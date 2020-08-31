@@ -19,20 +19,39 @@ spec:
       containers:
         - name: php
           image: {{ template "mediawiki.image" . }}
+          command:
+            - sh
+            - -c
           args:
-            - /usr/sbin/php-fpm
-            - --nodaemonize
+            - php /var/www/html/maintenance/install.php --dbname=$wgDBname --dbserver=$wgDBserver --installdbuser=root --installdbpass=$wgDBpassword --dbuser=$wgDBuser --dbpass=$wgUserDBpassword --server='' --scriptpath='' --lang=en --pass=aaaaa 'Wiki Name' 'Admin' && exec /usr/sbin/php-fpm --nodaemonize
           volumeMounts:
             - mountPath: /run/php-fpm/
               name: socket
-          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           resources:
             limits:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 500m
+              memory: 512Mi
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 500m
+              memory: 512Mi
+          env:
+            - name: wgDBname
+              value: {{ template "mediawiki.fullname" . }}
+            - name: wgDBpassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mediawiki.fullname" . }}
+                  key: MYSQL-ROOT-PASSWORD
+            - name: wgDBuser
+              value: {{ .Values.dbuser }}
+            - name: wgUserDBpassword
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "mediawiki.fullname" . }}
+                  key: MYSQL-WIKIUSER-PASSWORD
+            - name: wgDBserver
+              value: {{ template "mediawiki.fullname" . }}-mysql-service
         - name: apache
           image: {{ template "mediawiki.image" . }}
           command:
@@ -42,18 +61,18 @@ spec:
           volumeMounts:
             - mountPath: /run/php-fpm/
               name: socket
-          imagePullPolicy: {{ .Values.image.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           readinessProbe:
             httpGet:
               path: /
               port: 80
           resources:
             limits:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 500m
+              memory: 512Mi
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 500m
+              memory: 512Mi
       volumes:
       - name: socket
         emptyDir: {}
